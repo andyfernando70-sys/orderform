@@ -1,0 +1,816 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Hairtoper Order Form  — By Lian Official</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --ivory:#FAF7F4; --gold:#C9A97A; --espresso:#2C2420;
+      --walnut:#8B5E3C; --blush:#E8DDD4; --sage:#6B8C7A;
+      --red:#B85450; --white:#ffffff;
+    }
+    body { background:var(--ivory); font-family:'DM Sans',sans-serif; color:var(--espresso); min-height:100vh; display:flex; flex-direction:column; align-items:center; padding:40px 16px 60px; }
+
+    /* HEADER */
+    .brand-header { text-align:center; margin-bottom:36px; }
+    .brand-logo { font-family:'Cormorant Garamond',serif; font-size:13px; font-weight:500; letter-spacing:0.35em; text-transform:uppercase; color:var(--walnut); display:flex; align-items:center; justify-content:center; gap:12px; margin-bottom:10px; }
+    .brand-logo::before,.brand-logo::after { content:''; width:40px; height:1px; background:var(--gold); }
+    h1 { font-family:'Cormorant Garamond',serif; font-size:clamp(32px,6vw,52px); font-weight:400; line-height:1.1; color:var(--espresso); }
+    h1 em { font-style:italic; color:var(--walnut); }
+    .brand-sub { margin-top:10px; font-size:13px; color:var(--gold); letter-spacing:0.12em; }
+
+    /* CARD */
+    .card { width:100%; max-width:680px; background:var(--white); border-radius:4px; border:1px solid var(--blush); overflow:hidden; box-shadow:0 4px 32px rgba(44,36,32,0.07); }
+    .section { padding:28px 32px; }
+    .section+.section { border-top:1px solid var(--blush); }
+    .section-label { font-size:10px; font-weight:500; letter-spacing:0.22em; text-transform:uppercase; color:var(--gold); margin-bottom:18px; }
+
+    /* PRODUCT CARDS */
+    .product-grid { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+    .product-card { position:relative; cursor:pointer; }
+    .product-card input[type="radio"] { position:absolute; opacity:0; width:0; height:0; }
+    .product-card label { display:block; border:1.5px solid var(--blush); border-radius:4px; padding:14px 16px; cursor:pointer; transition:border-color 0.2s,background 0.2s; }
+    .product-card input:checked+label { border-color:var(--gold); background:#FBF5EE; }
+    .product-card label:hover { border-color:var(--gold); }
+    .product-name { font-family:'Cormorant Garamond',serif; font-size:16px; font-weight:600; color:var(--espresso); margin-bottom:2px; }
+    .product-desc { font-size:11px; color:#9A8880; line-height:1.4; margin-bottom:8px; }
+    .product-price { font-size:13px; font-weight:500; color:var(--walnut); }
+
+    /* SWATCHES */
+    .swatch-grid { display:flex; flex-wrap:wrap; gap:8px; }
+    .swatch-item { position:relative; }
+    .swatch-item input[type="radio"] { position:absolute; opacity:0; width:0; height:0; }
+    .swatch-item label { display:flex; align-items:center; gap:7px; border:1.5px solid var(--blush); border-radius:30px; padding:6px 12px 6px 8px; cursor:pointer; font-size:12px; transition:border-color 0.2s,background 0.2s; }
+    .swatch-item input:checked+label { border-color:var(--gold); background:#FBF5EE; font-weight:500; }
+    .swatch-item label:hover { border-color:var(--gold); }
+    .swatch-dot { width:16px; height:16px; border-radius:50%; border:1px solid rgba(0,0,0,0.1); flex-shrink:0; }
+
+    /* SIZE */
+    .size-grid { display:flex; gap:8px; flex-wrap:wrap; }
+    .size-item { position:relative; }
+    .size-item input[type="radio"] { position:absolute; opacity:0; width:0; height:0; }
+    .size-item label { display:block; border:1.5px solid var(--blush); border-radius:4px; padding:8px 18px; cursor:pointer; font-size:13px; text-align:center; transition:border-color 0.2s,background 0.2s; }
+    .size-item input:checked+label { border-color:var(--gold); background:#FBF5EE; font-weight:500; }
+    .size-item label:hover { border-color:var(--gold); }
+    .size-sub { font-size:10px; color:#9A8880; margin-top:2px; }
+
+    /* FIELDS */
+    .field-row { display:grid; grid-template-columns:1fr 1fr; gap:14px; }
+    .field { margin-bottom:14px; }
+    .field:last-child { margin-bottom:0; }
+    .field label { display:block; font-size:11px; font-weight:500; letter-spacing:0.08em; text-transform:uppercase; color:#9A8880; margin-bottom:6px; }
+    .field input,.field select,.field textarea { width:100%; border:1.5px solid var(--blush); border-radius:4px; padding:10px 13px; font-family:'DM Sans',sans-serif; font-size:14px; color:var(--espresso); background:var(--white); outline:none; transition:border-color 0.2s; appearance:none; }
+    .field input:focus,.field select:focus,.field textarea:focus { border-color:var(--gold); box-shadow:0 0 0 3px rgba(201,169,122,0.12); }
+    .field textarea { resize:vertical; min-height:80px; line-height:1.5; }
+    .select-wrap { position:relative; }
+    .select-wrap::after { content:'▾'; position:absolute; right:13px; top:50%; transform:translateY(-50%); color:var(--gold); pointer-events:none; font-size:14px; }
+
+    /* QTY */
+    .qty-control { display:flex; align-items:center; width:fit-content; border:1.5px solid var(--blush); border-radius:4px; overflow:hidden; }
+    .qty-btn { background:none; border:none; width:38px; height:38px; font-size:18px; cursor:pointer; color:var(--walnut); transition:background 0.15s; }
+    .qty-btn:hover { background:#FBF5EE; }
+    .qty-display { width:48px; text-align:center; font-size:15px; font-weight:500; border-left:1px solid var(--blush); border-right:1px solid var(--blush); height:38px; line-height:38px; }
+
+    /* PAYMENT OPTIONS */
+    .payment-grid { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+    .pay-item { position:relative; }
+    .pay-item input[type="radio"] { position:absolute; opacity:0; width:0; height:0; }
+    .pay-item label { display:flex; flex-direction:column; align-items:center; justify-content:center; gap:5px; border:1.5px solid var(--blush); border-radius:4px; padding:12px 8px; cursor:pointer; font-size:12px; font-weight:500; transition:border-color 0.2s,background 0.2s; }
+    .pay-item input:checked+label { border-color:var(--gold); background:#FBF5EE; }
+    .pay-item label:hover { border-color:var(--gold); }
+    .pay-icon { font-size:22px; }
+
+    /* ONGKIR BADGE */
+    .ongkir-badge { display:none; margin-top:8px; background:#F0F7F4; border:1px solid #C5DDD6; border-radius:4px; padding:9px 12px; font-size:12px; color:var(--sage); align-items:center; gap:6px; }
+    .ongkir-badge.show { display:flex; }
+    .ongkir-badge.unknown { background:#FFF8EE; border-color:var(--blush); color:var(--gold); }
+
+    /* PROMO BANNER */
+    .promo-banner { display:flex; align-items:center; gap:12px; background:linear-gradient(135deg,#2C2420 0%,#8B5E3C 100%); color:#FAF7F4; border-radius:4px; padding:13px 18px; }
+    .promo-tag { background:var(--gold); color:var(--espresso); font-size:10px; font-weight:700; letter-spacing:0.12em; padding:4px 10px; border-radius:30px; white-space:nowrap; flex-shrink:0; }
+    .promo-text { font-size:13px; line-height:1.45; }
+    .promo-text strong { font-size:14px; }
+
+    /* SUMMARY DISKON */
+    .summary-row.diskon-row { color:var(--sage); font-weight:500; }
+    .summary-row.coret span:last-child { text-decoration:line-through; color:#C0AEA8; }
+
+    /* SUMMARY */
+    .summary-box { background:#FAF7F4; border:1px solid var(--blush); border-radius:4px; padding:16px 20px; }
+    .summary-row { display:flex; justify-content:space-between; font-size:13px; color:#7A6860; margin-bottom:8px; }
+    .summary-row:last-child { margin-bottom:0; }
+    .summary-row.ongkir-row { color:var(--sage); }
+    .summary-total { font-family:'Cormorant Garamond',serif; font-size:20px; font-weight:600; color:var(--espresso); border-top:1px solid var(--blush); padding-top:10px; margin-top:10px; }
+    .summary-total span { color:var(--walnut); }
+
+    /* SUBMIT */
+    .btn-submit { width:100%; background:var(--espresso); color:var(--ivory); border:none; border-radius:4px; padding:16px; font-family:'DM Sans',sans-serif; font-size:14px; font-weight:500; letter-spacing:0.12em; text-transform:uppercase; cursor:pointer; transition:background 0.2s,transform 0.1s; }
+    .btn-submit:hover { background:var(--walnut); }
+    .btn-submit:active { transform:scale(0.99); }
+
+    /* PAYMENT OVERLAY */
+    .modal-overlay { display:none; position:fixed; inset:0; background:rgba(44,36,32,0.6); backdrop-filter:blur(6px); z-index:100; align-items:center; justify-content:center; padding:16px; }
+    .modal-overlay.show { display:flex; }
+    .modal-box { background:var(--white); border-radius:8px; width:100%; max-width:420px; max-height:90vh; overflow-y:auto; animation:pop 0.3s cubic-bezier(.22,1,.36,1); }
+    @keyframes pop { from{opacity:0;transform:scale(0.92) translateY(20px)} to{opacity:1;transform:scale(1) translateY(0)} }
+
+    .pay-header { background:var(--espresso); color:var(--ivory); padding:20px 24px; text-align:center; }
+    .pay-header h3 { font-family:'Cormorant Garamond',serif; font-size:22px; font-weight:400; }
+    .pay-header p { font-size:12px; opacity:0.65; margin-top:4px; }
+    .pay-body { padding:20px 24px 24px; }
+
+    .total-tagihan { border:2px solid var(--gold); border-radius:6px; padding:14px 18px; display:flex; justify-content:space-between; align-items:center; margin-bottom:18px; }
+    .total-tagihan .lbl { font-size:12px; color:#9A8880; }
+    .total-tagihan .amt { font-family:'Cormorant Garamond',serif; font-size:26px; font-weight:600; color:var(--walnut); }
+
+    .bank-card { background:var(--ivory); border:1px solid var(--blush); border-radius:8px; padding:16px 18px; margin-bottom:16px; }
+    .bank-card .bank-label { font-size:10px; letter-spacing:0.12em; text-transform:uppercase; color:#9A8880; margin-bottom:6px; }
+    .bank-card .bank-no { font-size:26px; font-weight:700; letter-spacing:0.06em; color:var(--espresso); }
+    .bank-card .bank-name { font-size:13px; color:var(--walnut); margin-top:2px; }
+    .copy-btn { margin-top:10px; background:none; border:1px solid var(--blush); border-radius:4px; padding:6px 16px; font-size:12px; cursor:pointer; color:var(--espresso); transition:all 0.2s; }
+    .copy-btn:hover { border-color:var(--gold); }
+    .copy-btn.ok { background:#EEF5F1; border-color:var(--sage); color:var(--sage); }
+
+    /* UPLOAD BUKTI TRANSFER */
+    .upload-section { margin-bottom:16px; }
+    .upload-label { font-size:10px; font-weight:500; letter-spacing:0.15em; text-transform:uppercase; color:#9A8880; margin-bottom:8px; display:block; }
+    .upload-area { border:2px dashed var(--blush); border-radius:8px; padding:20px 16px; text-align:center; cursor:pointer; transition:border-color 0.2s,background 0.2s; background:var(--ivory); }
+    .upload-area:hover { border-color:var(--gold); background:#FBF5EE; }
+    .upload-area.has-file { border-color:var(--sage); background:#EEF5F1; border-style:solid; }
+    .upload-area.upload-err { border-color:var(--red); background:#FFF5F5; }
+    .upload-icon { font-size:28px; margin-bottom:6px; }
+    .upload-hint { font-size:13px; color:var(--espresso); font-weight:500; margin-bottom:4px; }
+    .upload-sub { font-size:11px; color:#9A8880; }
+    #previewImg { max-width:100%; max-height:180px; border-radius:6px; object-fit:contain; margin-bottom:6px; display:block; margin-left:auto; margin-right:auto; }
+    .upload-filename { font-size:11px; color:var(--sage); font-weight:500; margin-bottom:8px; }
+    .upload-change { background:none; border:1px solid var(--blush); border-radius:4px; padding:5px 14px; font-size:11px; color:#9A8880; cursor:pointer; font-family:'DM Sans',sans-serif; transition:all 0.2s; }
+    .upload-change:hover { border-color:var(--gold); color:var(--espresso); }
+    .upload-error-msg { font-size:11px; color:var(--red); margin-top:6px; display:none; }
+    .upload-error-msg.show { display:block; }
+
+    .notice-box { background:#FFF8EE; border:1px solid #EDD9B5; border-radius:6px; padding:10px 14px; font-size:12px; color:#8B6A2A; line-height:1.5; margin-bottom:16px; }
+
+    .btn-confirm { width:100%; background:var(--sage); color:var(--white); border:none; border-radius:6px; padding:14px; font-family:'DM Sans',sans-serif; font-size:14px; font-weight:500; letter-spacing:0.1em; text-transform:uppercase; cursor:pointer; transition:opacity 0.2s; }
+    .btn-confirm:hover { opacity:0.88; }
+    .btn-cancel { width:100%; background:none; border:1px solid var(--blush); border-radius:6px; padding:10px; font-family:'DM Sans',sans-serif; font-size:13px; color:#9A8880; cursor:pointer; margin-top:8px; }
+    .btn-cancel:hover { border-color:var(--blush); color:var(--espresso); }
+
+    /* SUCCESS OVERLAY */
+    .success-overlay { display:none; position:fixed; inset:0; background:rgba(44,36,32,0.55); backdrop-filter:blur(4px); z-index:200; align-items:center; justify-content:center; }
+    .success-overlay.show { display:flex; }
+    .success-box { background:var(--white); border-radius:4px; padding:44px 40px; text-align:center; max-width:340px; width:90%; animation:pop 0.35s cubic-bezier(.22,1,.36,1); }
+    .success-icon { width:56px; height:56px; background:#EEF5F1; border-radius:50%; display:flex; align-items:center; justify-content:center; margin:0 auto 20px; font-size:24px; }
+    .success-box h2 { font-family:'Cormorant Garamond',serif; font-size:26px; font-weight:400; margin-bottom:10px; }
+    .success-box p { font-size:13px; color:#7A6860; line-height:1.6; margin-bottom:24px; }
+    .btn-close { border:1.5px solid var(--blush); background:none; color:var(--espresso); padding:10px 32px; border-radius:4px; cursor:pointer; font-size:13px; font-family:'DM Sans',sans-serif; transition:border-color 0.2s; }
+    .btn-close:hover { border-color:var(--gold); }
+
+    /* MISC */
+    .req { color:var(--red); margin-left:2px; }
+    .error-msg { font-size:11px; color:var(--red); margin-top:4px; display:none; }
+    .field.has-error input,.field.has-error select,.field.has-error textarea { border-color:var(--red); }
+    .field.has-error .error-msg { display:block; }
+    @media(max-width:480px) { .section{padding:22px 18px;} .product-grid{grid-template-columns:1fr;} .field-row{grid-template-columns:1fr;} .payment-grid{grid-template-columns:1fr 1fr;} }
+  </style>
+</head>
+<body>
+
+<header class="brand-header">
+  <div class="brand-logo">By Lian Official</div>
+  <h1>Hairtoper  <em>Order Form</em></h1>
+  <p class="brand-sub">Pesan sekarang • Pengiriman ke seluruh Indonesia</p>
+</header>
+
+<div class="card">
+
+  <!-- 01 PRODUK -->
+  <div class="section">
+    <div class="section-label">01 — Pilih Produk</div>
+    <div class="product-grid">
+      <div class="product-card">
+        <input type="radio" name="produk" id="p1" value="Tanpa Poni" data-price="560000" checked />
+        <label for="p1">
+          <div class="product-name">Tanpa Poni</div>
+          <div class="product-desc">100% rambut asli, Tampil Natural</div>
+          <div class="product-price">Rp 560.000</div>
+        </label>
+      </div>
+      <div class="product-card">
+        <input type="radio" name="produk" id="p2" value="Dengan Poni" data-price="560000" />
+        <label for="p2">
+          <div class="product-name">Dengan Poni</div>
+          <div class="product-desc">100% rambut asli, Tampil Natural</div>
+          <div class="product-price">Rp 560.000</div>
+        </label>
+      </div>
+    </div>
+  </div>
+
+  <!-- 02 WARNA & UKURAN -->
+  <div class="section">
+    <div class="section-label">02 — Warna & Ukuran</div>
+    <div class="field">
+      <label>Warna Rambut <span class="req">*</span></label>
+      <div class="swatch-grid">
+        <div class="swatch-item">
+          <input type="radio" name="warna" id="c1" value="Hitam Natural" checked />
+          <label for="c1"><span class="swatch-dot" style="background:#1A1A1A"></span>Hitam Natural</label>
+        </div>
+        <div class="swatch-item">
+          <input type="radio" name="warna" id="c2" value="Coklat" />
+          <label for="c2"><span class="swatch-dot" style="background:#7B4A2D"></span>Coklat</label>
+        </div>
+      </div>
+    </div>
+    <div class="field" style="margin-top:18px;">
+      <label>Ukuran Base <span class="req">*</span></label>
+      <div class="size-grid">
+        <div class="size-item">
+          <input type="radio" name="ukuran" id="s1" value="8cm × 11cm" checked />
+          <label for="s1">Standard<div class="size-sub">8cm × 11cm</div></label>
+        </div>
+      </div>
+    </div>
+    <div class="field" style="margin-top:18px;">
+      <label>Jumlah</label>
+      <div class="qty-control">
+        <button type="button" class="qty-btn" id="qtyMinus">−</button>
+        <div class="qty-display" id="qtyDisplay">1</div>
+        <button type="button" class="qty-btn" id="qtyPlus">+</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 03 DATA PEMESAN -->
+  <div class="section">
+    <div class="section-label">03 — Data Pemesan</div>
+    <div class="field-row">
+      <div class="field" id="f-nama">
+        <label>Nama Lengkap <span class="req">*</span></label>
+        <input type="text" id="nama" placeholder="Contoh: Sari Dewi" />
+        <div class="error-msg">Nama wajib diisi</div>
+      </div>
+      <div class="field" id="f-telepon">
+        <label>No. WhatsApp <span class="req">*</span></label>
+        <input type="tel" id="telepon" placeholder="08xx xxxx xxxx" />
+        <div class="error-msg">Nomor WA wajib diisi</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PROMO BANNER -->
+  <div class="section" style="padding-top:20px;padding-bottom:20px;">
+    <div class="promo-banner">
+      <span class="promo-tag">🎉 PROMO</span>
+      <div class="promo-text">
+        <strong>Diskon Ongkir 30% untuk Semua Transaksi!</strong>
+        Berlaku otomatis · Tidak perlu kode · Semua tujuan
+      </div>
+    </div>
+  </div>
+
+  <!-- 04 ALAMAT -->
+  <div class="section">
+    <div class="section-label">04 — Alamat Pengiriman</div>
+    <div class="field" id="f-alamat">
+      <label>Alamat Lengkap <span class="req">*</span></label>
+      <textarea id="alamat" placeholder="Jl. Contoh No. 1, RT 01/RW 02, Kel. Contoh, Kec. Contoh"></textarea>
+      <div class="error-msg">Alamat wajib diisi</div>
+    </div>
+    <div class="field-row">
+      <div class="field" id="f-kota">
+        <label>Kota / Kabupaten <span class="req">*</span></label>
+        <input type="text" id="kota" placeholder="Contoh: Jakarta" list="kota-list" autocomplete="off" />
+        <datalist id="kota-list"></datalist>
+        <div class="error-msg">Kota wajib diisi</div>
+        <!-- Ongkir badge -->
+        <div class="ongkir-badge" id="ongkirBadge">
+          <span>🚚</span><span id="ongkirText"></span>
+        </div>
+      </div>
+      <div class="field" id="f-kecamatan">
+        <label>Kecamatan <span class="req">*</span></label>
+        <input type="text" id="kecamatan" placeholder="Contoh: Sako" maxlength="50" />
+        <div class="error-msg">Kecamatan wajib diisi</div>
+      </div>
+    </div>
+    <div class="field">
+      <label>Ekspedisi</label>
+      <div class="select-wrap">
+        <select id="ekspedisi">
+          <option value="J&T Express">J&T Express</option>
+        </select>
+      </div>
+    </div>
+  </div>
+
+  <!-- 05 PEMBAYARAN -->
+  <div class="section">
+    <div class="section-label">05 — Metode Pembayaran</div>
+    <div style="display:flex;align-items:center;gap:14px;border:1.5px solid var(--gold);border-radius:4px;padding:14px 18px;background:#FBF5EE;">
+      <span style="font-size:24px;">🏦</span>
+      <div style="flex:1;">
+        <div style="font-size:14px;font-weight:500;color:var(--espresso);">Transfer BCA</div>
+        <div style="font-size:12px;color:#9A8880;margin-top:2px;">Konfirmasi otomatis via WhatsApp setelah transfer</div>
+      </div>
+      <span style="font-size:16px;color:var(--sage);">✓</span>
+      <input type="radio" name="payment" id="pay1" value="Transfer BCA" checked style="display:none;" />
+    </div>
+  </div>
+
+  <!-- 06 CATATAN -->
+  <div class="section">
+    <div class="section-label">06 — Catatan (Opsional)</div>
+    <div class="field">
+      <label>Catatan</label>
+      <textarea id="catatan" placeholder="Request warna custom, panjang rambut, dsb."></textarea>
+    </div>
+  </div>
+
+  <!-- RINGKASAN -->
+  <div class="section">
+    <div class="section-label">Ringkasan Order</div>
+    <div class="summary-box">
+      <div class="summary-row"><span>Produk</span><span id="sumProduk">-</span></div>
+      <div class="summary-row"><span>Warna</span><span id="sumWarna">-</span></div>
+      <div class="summary-row"><span>Ukuran</span><span id="sumUkuran">-</span></div>
+      <div class="summary-row"><span>Jumlah</span><span id="sumQty">-</span></div>
+      <div class="summary-row"><span>Ekspedisi</span><span id="sumEkspedisi">-</span></div>
+      <div class="summary-row"><span>Pembayaran</span><span id="sumPayment">-</span></div>
+      <div class="summary-row"><span>Subtotal Produk</span><span id="sumSubtotal">-</span></div>
+      <div class="summary-row coret"><span>🚚 Ongkir J&T</span><span id="sumOngkirNormal">-</span></div>
+      <div class="summary-row diskon-row"><span>✂️ Diskon Ongkir 30%</span><span id="sumDiskonOngkir">-</span></div>
+      <div class="summary-row ongkir-row"><span>Ongkir setelah diskon</span><span id="sumOngkir">-</span></div>
+      <div class="summary-row summary-total"><span>Total</span><span id="sumTotal">Rp <span>-</span></span></div>
+    </div>
+    <button type="button" class="btn-submit" style="margin-top:16px;" id="btnSubmit">
+      Konfirmasi &amp; Lanjut Bayar →
+    </button>
+  </div>
+
+</div><!-- /card -->
+
+<!-- ══ PAYMENT OVERLAY ══ -->
+<div class="modal-overlay" id="paymentOverlay">
+  <div class="modal-box">
+    <div class="pay-header">
+      <h3>Instruksi Pembayaran</h3>
+      <p>Selesaikan pembayaran untuk konfirmasi pesanan</p>
+    </div>
+    <div class="pay-body">
+
+      <div class="total-tagihan">
+        <div class="lbl">Total yang dibayar</div>
+        <div class="amt" id="payTotal">Rp -</div>
+      </div>
+
+      <!-- BCA Section -->
+      <div id="payBCA">
+        <div class="bank-card">
+          <div class="bank-label">Transfer ke rekening BCA</div>
+          <div class="bank-no" id="bcaNo">1234567890</div>
+          <div class="bank-name">a.n. <span id="bcaName">Nama Pemilik</span></div>
+          <button class="copy-btn" id="copyBtn" onclick="copyNorek()">Salin Nomor Rekening</button>
+        </div>
+        <div class="notice-box">
+          ⚠️ Transfer tepat sesuai nominal di atas, lalu upload bukti transfer di bawah sebelum konfirmasi.
+        </div>
+      </div>
+
+      <!-- UPLOAD BUKTI TRANSFER -->
+      <div class="upload-section">
+        <span class="upload-label">Bukti Transfer <span style="color:var(--red)">*</span></span>
+        <div class="upload-area" id="uploadArea" onclick="document.getElementById('buktiInput').click()">
+          <input type="file" id="buktiInput" accept="image/*" style="display:none;" onchange="handleFileUpload(event)" />
+          <div id="uploadPlaceholder">
+            <div class="upload-icon">📎</div>
+            <div class="upload-hint">Klik untuk pilih foto bukti transfer</div>
+            <div class="upload-sub">JPG, PNG · Maks. 5 MB</div>
+          </div>
+          <div id="uploadPreview" style="display:none;">
+            <img id="previewImg" src="" alt="Bukti Transfer" />
+            <div class="upload-filename" id="uploadFileName"></div>
+            <button type="button" class="upload-change" onclick="clearUpload(event)">🔄 Ganti Foto</button>
+          </div>
+        </div>
+        <div class="upload-error-msg" id="uploadErrorMsg">⚠️ Harap upload bukti transfer terlebih dahulu</div>
+      </div>
+
+      <button class="btn-confirm" id="btnSudahBayar">✓ Saya Sudah Transfer</button>
+      <button class="btn-cancel" id="btnBatal">← Kembali ke Form</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══ SUCCESS OVERLAY ══ -->
+<div class="success-overlay" id="successOverlay">
+  <div class="success-box">
+    <div class="success-icon">✓</div>
+    <h2>Pesanan Dikonfirmasi!</h2>
+    <p>Terima kasih, <strong id="successName"></strong>!<br>
+      Data pesanan telah dikirim via WhatsApp.<br>
+      <strong style="color:var(--walnut);">📎 Jangan lupa kirim foto bukti transfer di chat WhatsApp!</strong></p>
+    <button class="btn-close" id="btnClose">Tutup</button>
+  </div>
+</div>
+
+<script>
+/* ══════════════════════════════════════════════
+   ⚙️  KONFIGURASI — SESUAIKAN DATA KAMU
+══════════════════════════════════════════════ */
+const CONFIG = {
+  WA_NUMBER       : '6285642009659',
+  APPS_SCRIPT_URL : 'https://script.google.com/macros/s/AKfycbwB9V71J2Mbi2TDXUnEV5ICYRrlz2vcQ5OCFNWf6oWd4TkqxhJwxOEjHud62iPfOJNlIA/exec',
+
+  /* Info rekening BCA */
+  BCA_NOREK   : '0131255348',
+  BCA_ATASNAMA: 'BERLIAN NATALIANA',
+};
+/* ══════════════════════════════════════════════ */
+
+/* ── ONGKIR DATABASE J&T dari Palembang ─────────
+   Estimasi tarif per 1 kg (berat hairtoper ±300g = min. charge)
+   Catatan: API J&T tidak tersedia publik via browser (CORS).
+   Data ini berdasarkan zona tarif resmi J&T Express 2024.
+─────────────────────────────────────────────── */
+const ONGKIR_DB = {
+  /* SUMATERA SELATAN */
+  'palembang':11000,'prabumulih':14000,'lubuk linggau':20000,'lubuklinggau':20000,
+  'pagaralam':18000,'pagar alam':18000,'banyuasin':12000,'ogan ilir':13000,
+  'muara enim':17000,'lahat':20000,'musi banyuasin':22000,'musirawas':22000,
+  'ogan komering ilir':15000,'oki':15000,'ogan komering ulu':18000,'oku':18000,
+  /* LAMPUNG */
+  'bandar lampung':20000,'metro':22000,'lampung':20000,'pringsewu':22000,
+  'kotabumi':23000,'liwa':25000,'kalianda':21000,
+  /* JAMBI */
+  'jambi':22000,'muara bungo':27000,'sungai penuh':28000,'batanghari':25000,'sarolangun':26000,
+  /* BENGKULU */
+  'bengkulu':25000,'curup':26000,'rejang lebong':26000,'manna':27000,
+  /* BANGKA BELITUNG */
+  'pangkal pinang':28000,'pangkalpinang':28000,'bangka':28000,'belitung':30000,'tanjung pandan':30000,
+  /* SUMATERA BARAT */
+  'padang':27000,'bukittinggi':28000,'solok':28000,'payakumbuh':28000,'padang panjang':28000,
+  'sawahlunto':29000,'pariaman':28000,'dharmasraya':30000,
+  /* RIAU */
+  'pekanbaru':30000,'dumai':32000,'bengkalis':33000,'rengat':32000,'tembilahan':33000,
+  /* KEPULAUAN RIAU */
+  'batam':33000,'tanjung pinang':34000,'tanjungpinang':34000,'karimun':35000,
+  /* SUMATERA UTARA */
+  'medan':32000,'binjai':32000,'pematang siantar':33000,'pematangsiantar':33000,
+  'tebing tinggi':33000,'sibolga':35000,'padangsidimpuan':35000,'rantau prapat':34000,
+  'gunungsitoli':37000,
+  /* ACEH */
+  'banda aceh':37000,'lhokseumawe':35000,'langsa':35000,'sabang':42000,'meulaboh':38000,
+  /* DKI JAKARTA */
+  'jakarta':27000,'jakarta pusat':27000,'jakarta selatan':27000,'jakarta utara':27000,
+  'jakarta barat':27000,'jakarta timur':27000,
+  /* JAWA BARAT */
+  'depok':27000,'bekasi':27000,'bogor':28000,'bandung':30000,'cimahi':30000,
+  'sukabumi':30000,'tasikmalaya':32000,'cirebon':30000,'karawang':28000,
+  'subang':29000,'purwakarta':29000,'ciamis':32000,'garut':31000,'kuningan':31000,
+  'majalengka':31000,'indramayu':30000,
+  /* BANTEN */
+  'tangerang':27000,'tangerang selatan':27000,'serang':28000,'cilegon':28000,'pandeglang':29000,
+  /* JAWA TENGAH */
+  'semarang':32000,'solo':32000,'surakarta':32000,'magelang':33000,'salatiga':33000,
+  'pekalongan':32000,'tegal':32000,'cilacap':33000,'purwokerto':33000,'kudus':33000,
+  'jepara':34000,'demak':33000,'blora':34000,'rembang':34000,'pati':34000,'brebes':33000,
+  'kebumen':34000,'wonosobo':34000,'purworejo':34000,'boyolali':33000,'klaten':33000,
+  'wonogiri':34000,'sragen':33000,'karanganyar':33000,'sukoharjo':33000,
+  /* DI YOGYAKARTA */
+  'yogyakarta':33000,'sleman':33000,'bantul':33000,'kulonprogo':34000,'gunung kidul':34000,
+  /* JAWA TIMUR */
+  'surabaya':34000,'sidoarjo':34000,'gresik':34000,'malang':36000,'batu':36000,
+  'mojokerto':35000,'pasuruan':35000,'probolinggo':36000,'jember':38000,'banyuwangi':40000,
+  'kediri':36000,'blitar':37000,'tulungagung':37000,'madiun':36000,'ngawi':36000,
+  'bojonegoro':36000,'tuban':36000,'lamongan':35000,'sampang':38000,'pamekasan':38000,
+  'sumenep':40000,'madura':38000,'lumajang':38000,'bondowoso':38000,'situbondo':39000,
+  'nganjuk':36000,'ponorogo':37000,'trenggalek':37000,'pacitan':38000,'magetan':36000,
+  /* BALI */
+  'denpasar':42000,'badung':42000,'gianyar':43000,'tabanan':43000,'singaraja':45000,
+  'buleleng':45000,'bali':42000,'karangasem':44000,'klungkung':43000,'jembrana':44000,
+  /* NTB */
+  'mataram':47000,'lombok':47000,'sumbawa':52000,'bima':54000,'dompu':53000,
+  'lombok barat':47000,'lombok tengah':48000,'lombok timur':48000,'lombok utara':49000,
+  /* NTT */
+  'kupang':58000,'ende':62000,'maumere':62000,'flores':62000,'labuan bajo':65000,
+  'waingapu':63000,'waikabubak':64000,'kefamenanu':60000,'ruteng':63000,'atambua':60000,
+  /* KALIMANTAN BARAT */
+  'pontianak':42000,'singkawang':44000,'ketapang':46000,'sintang':47000,'sanggau':46000,
+  /* KALIMANTAN TENGAH */
+  'palangkaraya':44000,'palangka raya':44000,'sampit':45000,'pangkalan bun':46000,'muara teweh':47000,
+  /* KALIMANTAN SELATAN */
+  'banjarmasin':42000,'banjarbaru':43000,'martapura':43000,'kandangan':45000,'kotabaru':47000,
+  /* KALIMANTAN TIMUR */
+  'samarinda':46000,'balikpapan':46000,'bontang':48000,'tenggarong':47000,
+  /* KALIMANTAN UTARA */
+  'tarakan':52000,'tanjung selor':54000,'nunukan':56000,'malinau':57000,
+  /* SULAWESI SELATAN */
+  'makassar':50000,'gowa':50000,'maros':51000,'parepare':52000,'palopo':53000,'bone':54000,
+  'bulukumba':53000,'bantaeng':53000,'jeneponto':52000,'takalar':51000,'sinjai':54000,
+  /* SULAWESI TENGGARA */
+  'kendari':54000,'bau-bau':55000,'kolaka':54000,'raha':56000,
+  /* SULAWESI TENGAH */
+  'palu':54000,'poso':56000,'luwuk':56000,'tolitoli':57000,'donggala':55000,
+  /* SULAWESI BARAT */
+  'mamuju':56000,'majene':55000,'polewali mandar':55000,
+  /* SULAWESI UTARA */
+  'manado':58000,'bitung':58000,'tomohon':59000,'kotamobagu':58000,'tahuna':62000,
+  /* GORONTALO */
+  'gorontalo':56000,'marisa':57000,
+  /* MALUKU */
+  'ambon':63000,'tual':67000,'masohi':65000,
+  /* MALUKU UTARA */
+  'ternate':65000,'tidore':66000,'sofifi':66000,'tobelo':67000,
+  /* PAPUA BARAT */
+  'manokwari':72000,'sorong':70000,'fakfak':73000,'kaimana':74000,'bintuni':75000,
+  /* PAPUA */
+  'jayapura':78000,'merauke':82000,'timika':78000,'nabire':77000,'wamena':85000,
+  'biak':76000,'serui':78000,'sentani':78000,
+};
+
+/* Datalist autocomplete */
+const kotaList = document.getElementById('kota-list');
+Object.keys(ONGKIR_DB).forEach(k => {
+  const cap = k.charAt(0).toUpperCase()+k.slice(1);
+  const opt = document.createElement('option');
+  opt.value = cap;
+  kotaList.appendChild(opt);
+});
+
+/* ── STATE ─────────────────────────────────── */
+let qty     = 1;
+let ongkir  = 0;
+let orderData = null;
+let buktiTransferFile = null;
+
+const DISKON_ONGKIR_PCT = 30; // % diskon ongkir untuk semua transaksi
+
+/* ── HELPERS ─────────────────────────────── */
+function fmt(n){ return parseInt(n).toLocaleString('id-ID'); }
+function getPrice(){ const s=document.querySelector('input[name="produk"]:checked'); return s?parseInt(s.dataset.price):560000; }
+
+function getOngkir(kota){
+  if(!kota) return null;
+  const key = kota.toLowerCase().trim();
+  if(ONGKIR_DB[key] !== undefined) return ONGKIR_DB[key];
+  for(const [k,v] of Object.entries(ONGKIR_DB)){
+    if(key.includes(k) || k.includes(key)) return v;
+  }
+  return null;
+}
+
+function updateOngkirBadge(){
+  const kota      = document.getElementById('kota').value;
+  const kecamatan = document.getElementById('kecamatan').value;
+  const badge     = document.getElementById('ongkirBadge');
+  const txt       = document.getElementById('ongkirText');
+  const found     = getOngkir(kota);
+  if(!kota){ badge.className='ongkir-badge'; return; }
+  const dest = kecamatan.trim() ? `Kec. ${kecamatan.trim()}, ${kota}` : kota;
+  if(found !== null){
+    ongkir = found;
+    const setelahDiskon = Math.round(found * (1 - DISKON_ONGKIR_PCT/100));
+    badge.className = 'ongkir-badge show';
+    txt.textContent = `J&T ke ${dest}: Rp ${fmt(found)} → Rp ${fmt(setelahDiskon)} (hemat ${DISKON_ONGKIR_PCT}%!)`;
+  } else {
+    ongkir = 0;
+    badge.className = 'ongkir-badge unknown show';
+    txt.textContent = `Kota "${kota}" belum ada di database — ongkir dihitung manual`;
+  }
+  updateSummary();
+}
+
+/* ── SUMMARY ─────────────────────────────── */
+function getOrderData(){
+  const produk = document.querySelector('input[name="produk"]:checked');
+  const warna  = document.querySelector('input[name="warna"]:checked');
+  const ukuran = document.querySelector('input[name="ukuran"]:checked');
+  const exp    = document.getElementById('ekspedisi');
+  const pay    = document.querySelector('input[name="payment"]:checked');
+  const subtotal      = getPrice() * qty;
+  const diskonOngkir  = Math.round(ongkir * DISKON_ONGKIR_PCT / 100);
+  const ongkirFinal   = ongkir - diskonOngkir;
+  const total         = subtotal + ongkirFinal;
+  return {
+    produk   : produk ? produk.value : '-',
+    warna    : warna  ? warna.value  : '-',
+    ukuran   : ukuran ? ukuran.value : '-',
+    qty, ekspedisi: exp?exp.options[exp.selectedIndex].text:'-',
+    payment  : pay ? pay.value : '-',
+    nama     : document.getElementById('nama').value.trim(),
+    telepon  : document.getElementById('telepon').value.trim(),
+    alamat   : document.getElementById('alamat').value.trim(),
+    kota     : document.getElementById('kota').value.trim(),
+    kecamatan: document.getElementById('kecamatan').value.trim(),
+    catatan  : document.getElementById('catatan').value.trim(),
+    subtotal, ongkir, diskonOngkir, ongkirFinal, total,
+    subtotalFmt    : 'Rp '+fmt(subtotal),
+    ongkirFmt      : ongkir>0      ? 'Rp '+fmt(ongkir)      : 'Akan dikonfirmasi',
+    diskonOngkirFmt: diskonOngkir>0? '- Rp '+fmt(diskonOngkir) : '-',
+    ongkirFinalFmt : ongkirFinal>0 ? 'Rp '+fmt(ongkirFinal)  : 'Akan dikonfirmasi',
+    totalFmt       : 'Rp '+fmt(total),
+  };
+}
+
+function updateSummary(){
+  const d = getOrderData();
+  document.getElementById('sumProduk').textContent      = d.produk;
+  document.getElementById('sumWarna').textContent       = d.warna;
+  document.getElementById('sumUkuran').textContent      = d.ukuran;
+  document.getElementById('sumQty').textContent         = d.qty+' pcs';
+  document.getElementById('sumEkspedisi').textContent   = d.ekspedisi.split('(')[0].trim();
+  document.getElementById('sumPayment').textContent     = d.payment;
+  document.getElementById('sumSubtotal').textContent    = d.subtotalFmt;
+  document.getElementById('sumOngkirNormal').textContent= d.ongkirFmt;
+  document.getElementById('sumDiskonOngkir').textContent= d.diskonOngkirFmt;
+  document.getElementById('sumOngkir').textContent      = d.ongkirFinalFmt;
+  document.getElementById('sumTotal').innerHTML         = 'Rp <span>'+fmt(d.total)+'</span>';
+}
+
+/* ── QTY ─────────────────────────────────── */
+document.getElementById('qtyMinus').addEventListener('click',()=>{
+  if(qty>1){qty--;document.getElementById('qtyDisplay').textContent=qty;updateSummary();}
+});
+document.getElementById('qtyPlus').addEventListener('click',()=>{
+  qty++;document.getElementById('qtyDisplay').textContent=qty;updateSummary();
+});
+
+/* ── UPLOAD BUKTI TRANSFER ──────────────────── */
+function handleFileUpload(event){
+  const file = event.target.files[0];
+  if(!file) return;
+  if(file.size > 5 * 1024 * 1024){
+    alert('File terlalu besar! Maksimal 5 MB.');
+    return;
+  }
+  buktiTransferFile = file;
+  const reader = new FileReader();
+  reader.onload = (e) => {
+    document.getElementById('previewImg').src = e.target.result;
+    document.getElementById('uploadFileName').textContent = '✓ ' + file.name;
+    document.getElementById('uploadPlaceholder').style.display = 'none';
+    document.getElementById('uploadPreview').style.display     = 'block';
+    document.getElementById('uploadArea').classList.remove('upload-err');
+    document.getElementById('uploadArea').classList.add('has-file');
+    document.getElementById('uploadErrorMsg').classList.remove('show');
+  };
+  reader.readAsDataURL(file);
+}
+
+function clearUpload(event){
+  event.stopPropagation();
+  buktiTransferFile = null;
+  document.getElementById('buktiInput').value = '';
+  document.getElementById('uploadPlaceholder').style.display = 'block';
+  document.getElementById('uploadPreview').style.display     = 'none';
+  document.getElementById('uploadArea').classList.remove('has-file');
+}
+
+/* ── LISTENERS ───────────────────────────── */
+document.querySelectorAll('input[type="radio"],select').forEach(el=>el.addEventListener('change',updateSummary));
+document.getElementById('kota').addEventListener('input', updateOngkirBadge);
+document.getElementById('kecamatan').addEventListener('input', updateOngkirBadge);
+
+/* ── VALIDASI ────────────────────────────── */
+function validate(){
+  const fields=[
+    {id:'nama',fId:'f-nama'},{id:'telepon',fId:'f-telepon'},
+    {id:'alamat',fId:'f-alamat'},{id:'kota',fId:'f-kota'},{id:'kecamatan',fId:'f-kecamatan'},
+  ];
+  let ok=true;
+  fields.forEach(f=>{
+    const el=document.getElementById(f.id);
+    const w=document.getElementById(f.fId);
+    if(!el.value.trim()){w.classList.add('has-error');ok=false;}
+    else{w.classList.remove('has-error');}
+  });
+  return ok;
+}
+
+/* ── COPY NOREK ──────────────────────────── */
+function copyNorek(){
+  navigator.clipboard.writeText(CONFIG.BCA_NOREK).then(()=>{
+    const btn=document.getElementById('copyBtn');
+    btn.textContent='✓ Tersalin!';
+    btn.classList.add('ok');
+    setTimeout(()=>{btn.textContent='Salin Nomor Rekening';btn.classList.remove('ok');},2500);
+  });
+}
+
+/* ── SHOW PAYMENT OVERLAY ─────────────────── */
+function showPaymentOverlay(d){
+  document.getElementById('payTotal').textContent = d.totalFmt;
+  document.getElementById('bcaNo').textContent    = CONFIG.BCA_NOREK;
+  document.getElementById('bcaName').textContent  = CONFIG.BCA_ATASNAMA;
+
+  /* Reset upload area setiap kali overlay dibuka */
+  buktiTransferFile = null;
+  document.getElementById('buktiInput').value = '';
+  document.getElementById('uploadPlaceholder').style.display = 'block';
+  document.getElementById('uploadPreview').style.display     = 'none';
+  document.getElementById('uploadArea').classList.remove('has-file','upload-err');
+  document.getElementById('uploadErrorMsg').classList.remove('show');
+
+  document.getElementById('paymentOverlay').classList.add('show');
+}
+
+/* ── KIRIM KE GOOGLE SHEETS ──────────────── */
+async function kirimKeSheets(d){
+  try{
+    await fetch(CONFIG.APPS_SCRIPT_URL,{
+      method:'POST', mode:'no-cors',
+      headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({...d, timestamp:new Date().toLocaleString('id-ID')}),
+    });
+  } catch(err){ console.warn('Sheets error:',err); }
+}
+
+/* ── BUKA WHATSAPP ───────────────────────── */
+function bukaWhatsApp(d){
+  const pesan =
+` *ORDER HAIRTOPER BARU*
+━━━━━━━━━━━━━━━━━━━━━━
+ *Produk:* ${d.produk}
+ *Warna:* ${d.warna}
+ *Ukuran:* ${d.ukuran}
+ *Jumlah:* ${d.qty} pcs
+━━━━━━━━━━━━━━━━━━━━━━
+ *Nama:* ${d.nama}
+ *WhatsApp:* ${d.telepon}
+━━━━━━━━━━━━━━━━━━━━━━
+ *Alamat:* ${d.alamat}
+ *Kota:* ${d.kota}
+ *Kecamatan:* ${d.kecamatan}
+ *Ekspedisi:* ${d.ekspedisi}
+━━━━━━━━━━━━━━━━━━━━━━
+ *Subtotal:* ${d.subtotalFmt}
+ *Ongkir Normal:* ${d.ongkirFmt}
+ *Diskon Ongkir 20%:* ${d.diskonOngkirFmt}
+ *Ongkir Final:* ${d.ongkirFinalFmt}
+ *TOTAL BAYAR:* ${d.totalFmt}
+ *Pembayaran:* ${d.payment}
+ *Bukti Transfer:* Dikirim langsung via WhatsApp
+━━━━━━━━━━━━━━━━━━━━━━
+ *Catatan:* ${d.catatan||'-'}`;
+
+  window.open(`https://wa.me/${CONFIG.WA_NUMBER}?text=${encodeURIComponent(pesan)}`,'_blank');
+}
+
+/* ── SUBMIT: form → payment overlay ─────── */
+document.getElementById('btnSubmit').addEventListener('click',()=>{
+  if(!validate()){
+    document.querySelector('.has-error').scrollIntoView({behavior:'smooth',block:'center'});
+    return;
+  }
+  orderData = getOrderData();
+  showPaymentOverlay(orderData);
+});
+
+/* ── SUDAH BAYAR: validasi upload → sheets + WA + success ─── */
+document.getElementById('btnSudahBayar').addEventListener('click', async()=>{
+  /* Wajib upload bukti transfer */
+  if(!buktiTransferFile){
+    document.getElementById('uploadErrorMsg').classList.add('show');
+    document.getElementById('uploadArea').classList.add('upload-err');
+    document.getElementById('uploadArea').scrollIntoView({behavior:'smooth',block:'center'});
+    return;
+  }
+
+  const btn = document.getElementById('btnSudahBayar');
+  btn.textContent = 'Memproses...';
+  btn.disabled    = true;
+
+  /* Coba copy gambar ke clipboard agar bisa di-paste langsung di WA (desktop) */
+  try {
+    const blob = await fetch(document.getElementById('previewImg').src).then(r=>r.blob());
+    await navigator.clipboard.write([new ClipboardItem({[blob.type]:blob})]);
+  } catch(e){ /* clipboard tidak didukung / tidak ada izin — abaikan */ }
+
+  await kirimKeSheets(orderData);
+  bukaWhatsApp(orderData);
+
+  btn.textContent = '✓ Saya Sudah Transfer';
+  btn.disabled    = false;
+  document.getElementById('paymentOverlay').classList.remove('show');
+  document.getElementById('successName').textContent = orderData.nama;
+  document.getElementById('successOverlay').classList.add('show');
+});
+
+/* ── BATAL ───────────────────────────────── */
+document.getElementById('btnBatal').addEventListener('click',()=>{
+  document.getElementById('paymentOverlay').classList.remove('show');
+});
+
+document.getElementById('btnClose').addEventListener('click',()=>{
+  document.getElementById('successOverlay').classList.remove('show');
+});
+
+/* INIT */
+updateSummary();
+</script>
+</body>
+</html>
